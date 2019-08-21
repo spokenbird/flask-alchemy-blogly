@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<form action="/users/{{ profile.id }}/edit" method="POST">
+    <div class="form-group">
+        <label for="first-name">First Name</label>
+        <input type="text" class="form-control" id="first-name" placeholder="{{ profile.first_name }}">
+    </div>
+    <div class="form-group">
+        <label for="last-name">Last Name</label>
+        <input type="text" class="form-control" id="last-name" placeholder="{{ profile.last_name }}">
+    </div>
+    <div class="form-group">
+        <label for="img-url">Image URL</label>
+        <input type="text" class="form-control" id="img-url" placeholder="{{ profile.image_url }}">
+    </div>
+    <a href="/user/{{ profile.id }}" class="btn btn-outline-info float-right">Cancel</button>
+    <button type="submit" class="btn btn-secondary float-right">Save</button>
+</form>
+{% endblock content %}

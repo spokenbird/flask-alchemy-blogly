@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row my-5">
+    <div class="col-sm-4 user-img">
+        <img class="img-thumbnail" src="{{ image_url }}" alt="{{ first_name }} \'s profile picture">
+    </div>
+    <div class="col-sm-8">
+        <h1>
+            {{ first_name }} {{ last_name }}
+        </h1>
+        <a href="/user/{{ user_id }}/edit" class="btn btn-primary">Edit</a>
+        <a href="/user/{{ user_id }}/delete" class="btn btn-danger">Delete</a>
+    </div>
+</div>
+{% endblock content %}

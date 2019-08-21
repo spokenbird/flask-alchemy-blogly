@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<form action="/users/new" method="POST">
+    <div class="form-group">
+        <label for="first-name">First Name</label>
+        <input type="text" class="form-control" name="first" id="first-name" placeholder="Enter a first name">
+    </div>
+    <div class="form-group">
+        <label for="last-name">Last Name</label>
+        <input type="text" class="form-control" name="last" id="last-name" placeholder="Enter a last name">
+    </div>
+    <div class="form-group">
+        <label for="img-url">Image URL</label>
+        <input type="text" class="form-control" name="img" id="img-url" placeholder="Provide an image of this user">
+    </div>
+    <button type="submit" class="btn  btn-success float-right">Add</button>
+</form>
+{% endblock content %}
