@@ -6,10 +6,28 @@
             <label for="post-title">Title</label>
             <input type="text" name="post-title" class="form-control" id="post-title">
         </div>
+        {% with errors = get_flashed_messages(category_filter=["title"]) %}
+            {% if errors %}
+                {% for msg in errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ msg }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <div class="form-group">
             <label for="post-content">Content</label>
             <textarea name="post-content" class="form-control" id="post-content" cols="30" rows="10"></textarea>
         </div>
+        {% with errors = get_flashed_messages(category_filter=["content"]) %}
+            {% if errors %}
+                {% for msg in errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ msg }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <button type="submit" class="btn btn-secondary float-right">Save</button>
         <a href="/users/{{ user_id }}" class="btn btn-outline-info float-right mr-2">Cancel</a>
     </form>
