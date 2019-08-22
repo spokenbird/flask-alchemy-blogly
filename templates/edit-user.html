@@ -1,14 +1,41 @@
 {% extends 'base.html' %}
 {% block content %}
-<form action="/users/{{ user_id }}/edit" method="POST" class="my-5">
+{% with errors = get_flashed_messages(category_filter=["first-last"]) %}
+    {% if errors %}
+        {% for msg in errors %}
+        <div class="alert alert-danger" role="alert">
+                {{ msg }}
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+<form action="/users/{{ user_id }}/edit" method="POST">
     <div class="form-group">
         <label for="first-name">First Name</label>
         <input type="text" class="form-control" id="first-name" name="first" value="{{ first_name }}">
     </div>
+    {% with errors = get_flashed_messages(category_filter=["first"]) %}
+        {% if errors %}
+            {% for msg in errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ msg }}
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <div class="form-group">
         <label for="last-name">Last Name</label>
         <input type="text" class="form-control" id="last-name" name="last" value="{{ last_name }}">
     </div>
+    {% with errors = get_flashed_messages(category_filter=["last"]) %}
+        {% if errors %}
+            {% for msg in errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ msg }}
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <div class="form-group">
         <label for="img-url">Image URL</label>
         <input type="text" class="form-control" id="img-url" name="img" value="{{ image_url }}">

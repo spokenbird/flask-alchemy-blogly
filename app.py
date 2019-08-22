@@ -44,6 +44,15 @@ def new_user():
         image = create_user_form["img"]
         if image == '':
             image = None
+        if first == '' and last == '':
+            flash(f'Please enter a first and last name.', 'first-last')
+            return redirect('/users/new')
+        if first == '':
+            flash(f'Please enter a first name.', 'first')
+            return redirect('/users/new')
+        if last == '':
+            flash(f'Please enter a last name.', 'last')
+            return redirect('/users/new')
         # Process the user into the database
         new_user = User(first_name=first, last_name=last, image_url=image)
         db.session.add(new_user)
@@ -81,7 +90,17 @@ def edit_user(user_id):
         first = edit_user_form['first']
         last = edit_user_form['last']
         image = edit_user_form['img']
-
+        if image == '':
+            image = '/static/images/default-profile.jpg'
+        if first == '' and last == '':
+            flash(f'Please enter a first and last name.', 'first-last')
+            return redirect(f'/users/{user_id}/edit')
+        if first == '':
+            flash(f'Please enter a first name.', 'first')
+            return redirect(f'/users/{user_id}/edit')
+        if last == '':
+            flash(f'Please enter a last name.', 'last')
+            return redirect(f'/users/{user_id}/edit')
 
         print("USER INFO ------->>>>>>", user_from_db)
         user_from_db.first_name = first
@@ -97,6 +116,7 @@ def edit_user(user_id):
         image_url = user_from_db.image_url
 
         return render_template('edit-user.html', first_name=first_name, last_name=last_name, image_url=image_url, user_id=user_id)
+
 
 @app.route('/users/<user_id>/delete')
 def delete_user(user_id):
