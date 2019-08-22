@@ -199,3 +199,7 @@ def edit_post(post_id):
         return render_template('edit-post.html', post_id=post_id, 
                                                  title=post.title,                    content=post.content,
                                                  user_id=post.user.id)
+
+@app.route('post/<int:post_id>/delete')
+def delete_post():
+    """
