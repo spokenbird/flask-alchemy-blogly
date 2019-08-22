@@ -140,6 +140,9 @@ def new_post(user_id):
         submitted_post = request.form
         title = submitted_post['post-title']
         content = submitted_post['post-content']
+        if title == '' and content == '':
+            flash('Please enter a post title and content', 'content-title')
+            return redirect(f'/users/{user_id}/posts/new')
         if title == '':
             flash('Please enter a post title.', 'title')
             return redirect(f'/users/{user_id}/posts/new')
@@ -170,8 +173,9 @@ def show_post(post_id):
     last_name = post.user.last_name
 
     return render_template('post-detail.html', title=title, content=content,                                                     first_name=first_name,                                                            last_name=last_name,
-                                               post_id=post_id,
-                                               user_id=post.user.id)
+                           post_id=post_id,
+                           user_id=post.user.id)
+
 
 @app.route('/posts/<int:post_id>/edit', methods=['GET', 'POST'])
 def edit_post(post_id):
@@ -182,11 +186,14 @@ def edit_post(post_id):
         edits = request.form
         edited_title = edits['post-title']
         edited_content = edits['post-content']
+        if edited_title == '' and edited_content == '':
+            flash('Please enter a post title and content', 'content-title')
+            return redirect(f'/posts/{post_id}/edit')
         if edited_title == '':
-            flash('Please enter a post title.', 'edited_title')
+            flash('Please enter a post title.', 'title')
             return redirect(f'/posts/{post_id}/edit')
         if edited_content == '':
-            flash('Please enter your post content.', 'edited_content')
+            flash('Please enter your post content.', 'content')
             return redirect(f'/posts/{post_id}/edit')
 
         post.title = edited_title
@@ -196,10 +203,19 @@ def edit_post(post_id):
         return redirect(f'/users/{post.user.id}')
 
     else:
-        return render_template('edit-post.html', post_id=post_id, 
-                                                 title=post.title,                    content=post.content,
-                                                 user_id=post.user.id)
+        return render_template('edit-post.html', post_id=post_id,
+                               title=post.title,                    content=post.content,
+                               user_id=post.user.id)
 
-@app.route('post/<int:post_id>/delete')
-def delete_post():
-    """
+
+@app.route('/posts/<int:post_id>/delete', methods=['POST'])
+def delete_post(post_id):
+    """Delete users post"""
+
+    post_from_db = Post.query.get(post_id)
+    user = post_from_db.user.id
+
+    db.session.delete(post_from_db)
+    db.session.commit()
+
+    return redirect(f'/users/{user}')

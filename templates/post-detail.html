@@ -4,7 +4,9 @@
   <h1>{{ title }}</h1>
   <p>{{ content }}</p>
   <p><i><span class="text-muted">Post authored by:</span> {{ first_name }} {{ last_name }}</i></p>
-  <a href="/posts/{{ post_id }}/edit" class="btn btn-primary mr-1">Edit</a>
-  <a href="/posts/{{ post_id }}/delete" class="btn btn-danger">Delete</a>
+  <form action="/posts/{{ post_id }}/delete" method="POST">
+    <a href="/posts/{{ post_id }}/edit" class="btn btn-primary mr-1">Edit</a>
+    <button type="submit" class="btn btn-danger">Delete</button>
+  </form>
 
 {% endblock content %}

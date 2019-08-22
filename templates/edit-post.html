@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
   <h1>Edit Post</h1>
+  {% with errors = get_flashed_messages(category_filter=["content-title"]) %}
+          {% if errors %}
+              {% for msg in errors %}
+              <div class="alert alert-danger" role="alert">
+                  {{ msg }}
+              </div>
+              {% endfor %}
+          {% endif %}
+      {% endwith %}
   <form action="/posts/{{ post_id }}/edit" method="POST">
       <div class="form-group">
           <label for="post-title">Title</label>
@@ -28,8 +37,8 @@
               {% endfor %}
           {% endif %}
       {% endwith %}
-      <a href="/users/{{ user_id }}" class="btn btn-outline-info float-right mr-2">Cancel</a>
       <button type="submit" class="btn btn-secondary float-right">Save</button>
+      <a href="/users/{{ user_id }}" class="btn btn-outline-info float-right mr-2">Cancel</a>
   </form>
 
 {% endblock content %}

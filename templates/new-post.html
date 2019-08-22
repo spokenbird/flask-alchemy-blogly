@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
     <h1>Add a Post for {{ first_name }} {{ last_name }}</h1>
+    {% with errors = get_flashed_messages(category_filter=["content-title"]) %}
+            {% if errors %}
+                {% for msg in errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ msg }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
     <form action="/users/{{ user_id }}/posts/new" method="POST">
         <div class="form-group">
             <label for="post-title">Title</label>
