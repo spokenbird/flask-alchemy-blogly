@@ -2,7 +2,7 @@
 
 from flask import Flask, render_template, request, flash, redirect
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User
+from models import db, connect_db, User, Post
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "terces"
@@ -74,9 +74,13 @@ def show_profile(user_id):
     last_name = profile.last_name
     image_url = profile.image_url
 
+    # Get posts from DB
+    posts_from_db = Post.query.filter_by(user_id=user_id)
+    print("All this user's first posts ------->", posts_from_db[0].title)
+
     return render_template('user-detail.html', first_name=first_name,
                            last_name=last_name, image_url=image_url,
-                           user_id=user_id)
+                           user_id=user_id, posts=posts_from_db)
 
 
 @app.route('/users/<user_id>/edit', methods=['GET', 'POST'])
