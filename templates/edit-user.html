@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
-<form action="/users/{{ profile.id }}/edit" method="POST">
+<form action="/users/{{ user_id }}/edit" method="POST" class="my-5">
     <div class="form-group">
         <label for="first-name">First Name</label>
-        <input type="text" class="form-control" id="first-name" placeholder="{{ profile.first_name }}">
+        <input type="text" class="form-control" id="first-name" name="first" value="{{ first_name }}">
     </div>
     <div class="form-group">
         <label for="last-name">Last Name</label>
-        <input type="text" class="form-control" id="last-name" placeholder="{{ profile.last_name }}">
+        <input type="text" class="form-control" id="last-name" name="last" value="{{ last_name }}">
     </div>
     <div class="form-group">
         <label for="img-url">Image URL</label>
-        <input type="text" class="form-control" id="img-url" placeholder="{{ profile.image_url }}">
+        <input type="text" class="form-control" id="img-url" name="img" value="{{ image_url }}">
     </div>
-    <a href="/user/{{ profile.id }}" class="btn btn-outline-info float-right">Cancel</button>
     <button type="submit" class="btn btn-secondary float-right">Save</button>
+    <a href="/user/{{ user_id }}" class="btn btn-outline-info float-right mr-2">Cancel</a>
 </form>
 {% endblock content %}

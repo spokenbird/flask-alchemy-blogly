@@ -74,17 +74,36 @@ def show_profile(user_id):
 def edit_user(user_id):
     """User profile editing page"""
 
+    user_from_db = User.query.get_or_404(user_id)
+
     if request.method == 'POST':
         edit_user_form = request.form
-        first = edit_user_form["first"]
-        last = edit_user_form["last"]
-        image = edit_user_form["img"]
+        first = edit_user_form['first']
+        last = edit_user_form['last']
+        image = edit_user_form['img']
 
+
+        print("USER INFO ------->>>>>>", user_from_db)
+        user_from_db.first_name = first
+        user_from_db.last_name = last
+        user_from_db.image_url = image
+        db.session.commit()
+
+        return redirect(f'/users/{user_id}')
 
     else:
-        profile = User.query.get(user_id)
-        first_name = profile.first_name
-        last_name = profile.last_name
-        image_url = profile.image_url
+        first_name = user_from_db.first_name
+        last_name = user_from_db.last_name
+        image_url = user_from_db.image_url
 
-        return render_template('edit-user.html', )
+        return render_template('edit-user.html', first_name=first_name, last_name=last_name, image_url=image_url, user_id=user_id)
+
+@app.route('/users/<user_id>/delete')
+def delete_user(user_id):
+    """Delete User profile"""
+    user_from_db = User.query.get(user_id)
+
+    db.session.delete(user_from_db)
+    db.session.commit()
+
+    return redirect('/users')
