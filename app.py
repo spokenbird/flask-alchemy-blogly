@@ -19,17 +19,13 @@ connect_db(app)
 @app.route('/')
 def index():
     """Serve the home page."""
-
     return redirect('/users')
 
 
 @app.route('/users')
 def users():
     """Serve the users page with a list of all users."""
-
-    # Do a GET request to SQLAlchemy for all Users
     user_list = User.query.all()
-
     return render_template('/users.html', users=user_list)
 
 
@@ -53,13 +49,11 @@ def new_user():
         if last == '':
             flash(f'Please enter a last name.', 'last')
             return redirect('/users/new')
-        # Process the user into the database
+
         new_user = User(first_name=first, last_name=last, image_url=image)
         db.session.add(new_user)
         db.session.commit()
-        print('THE NEW USER ID IS', new_user.id)
 
-        # Render the Users User ID page
         return redirect(f'/users/{new_user.id}')
     else:
         return render_template('create-user.html')
@@ -74,7 +68,6 @@ def show_profile(user_id):
     last_name = profile.last_name
     image_url = profile.image_url
 
-    # Get posts from DB
     posts_from_db = Post.query.filter_by(user_id=user_id)
 
     return render_template('user-detail.html', first_name=first_name,
@@ -105,7 +98,6 @@ def edit_user(user_id):
             flash(f'Please enter a last name.', 'last')
             return redirect(f'/users/{user_id}/edit')
 
-        print("USER INFO ------->>>>>>", user_from_db)
         user_from_db.first_name = first
         user_from_db.last_name = last
         user_from_db.image_url = image
@@ -149,6 +141,7 @@ def new_post(user_id):
         if content == '':
             flash('Please enter your post content.', 'content')
             return redirect(f'/users/{user_id}/posts/new')
+
         new_post = Post(title=title, content=content, user_id=user_id)
         db.session.add(new_post)
         db.session.commit()
@@ -172,7 +165,8 @@ def show_post(post_id):
     first_name = post.user.first_name
     last_name = post.user.last_name
 
-    return render_template('post-detail.html', title=title, content=content,                                                     first_name=first_name,                                                            last_name=last_name,
+    return render_template('post-detail.html', title=title, content=content, first_name=first_name, 
+                           last_name=last_name,
                            post_id=post_id,
                            user_id=post.user.id)
 
@@ -200,11 +194,12 @@ def edit_post(post_id):
         post.content = edited_content
         db.session.add(post)
         db.session.commit()
-        return redirect(f'/users/{post.user.id}')
 
+        return redirect(f'/users/{post.user.id}')
     else:
         return render_template('edit-post.html', post_id=post_id,
-                               title=post.title,                    content=post.content,
+                               title=post.title,
+                               content=post.content,
                                user_id=post.user.id)
 
 
