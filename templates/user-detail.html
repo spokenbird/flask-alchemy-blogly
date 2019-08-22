@@ -14,7 +14,7 @@
             Posts
         </h1>
         {% for post in posts %}
-            <li> {{ post.title }} </li>   
+            <li> <a href="/posts/{{ post.id }}">{{ post.title }}</a></li>   
         {% endfor %}
         <a href="/users/{{ user_id }}/posts/new">Add Post</a>
     </div>
