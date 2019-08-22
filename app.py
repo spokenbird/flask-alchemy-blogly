@@ -2,7 +2,7 @@
 
 from flask import Flask, render_template, request, flash, redirect
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User, Post
+from models import db, connect_db, User, Post, Tag, PostTag
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "terces"
