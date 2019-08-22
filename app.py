@@ -76,7 +76,6 @@ def show_profile(user_id):
 
     # Get posts from DB
     posts_from_db = Post.query.filter_by(user_id=user_id)
-    print("All this user's first posts ------->", posts_from_db[0].title)
 
     return render_template('user-detail.html', first_name=first_name,
                            last_name=last_name, image_url=image_url,
@@ -131,3 +130,72 @@ def delete_user(user_id):
     db.session.commit()
 
     return redirect('/users')
+
+
+@app.route('/users/<user_id>/posts/new', methods=['GET', 'POST'])
+def new_post(user_id):
+    """Add a new post"""
+
+    if request.method == 'POST':
+        submitted_post = request.form
+        title = submitted_post['post-title']
+        content = submitted_post['post-content']
+        if title == '':
+            flash('Please enter a post title.', 'title')
+            return redirect(f'/users/{user_id}/posts/new')
+        if content == '':
+            flash('Please enter your post content.', 'content')
+            return redirect(f'/users/{user_id}/posts/new')
+        new_post = Post(title=title, content=content, user_id=user_id)
+        db.session.add(new_post)
+        db.session.commit()
+
+        return redirect(f'/posts/{new_post.id}')
+    else:
+        user_from_db = User.query.get_or_404(user_id)
+        first_name = user_from_db.first_name
+        last_name = user_from_db.last_name
+
+        return render_template('new-post.html', first_name=first_name,
+                               last_name=last_name, user_id=user_id)
+
+
+@app.route('/posts/<int:post_id>')
+def show_post(post_id):
+    """Show the selected post"""
+    post = Post.query.get_or_404(post_id)
+    title = post.title
+    content = post.content
+    first_name = post.user.first_name
+    last_name = post.user.last_name
+
+    return render_template('post-detail.html', title=title, content=content,                                                     first_name=first_name,                                                            last_name=last_name,
+                                               post_id=post_id,
+                                               user_id=post.user.id)
+
+@app.route('/posts/<int:post_id>/edit', methods=['GET', 'POST'])
+def edit_post(post_id):
+    """Edit a post"""
+    post = Post.query.get_or_404(post_id)
+
+    if request.method == 'POST':
+        edits = request.form
+        edited_title = edits['post-title']
+        edited_content = edits['post-content']
+        if edited_title == '':
+            flash('Please enter a post title.', 'edited_title')
+            return redirect(f'/posts/{post_id}/edit')
+        if edited_content == '':
+            flash('Please enter your post content.', 'edited_content')
+            return redirect(f'/posts/{post_id}/edit')
+
+        post.title = edited_title
+        post.content = edited_content
+        db.session.add(post)
+        db.session.commit()
+        return redirect(f'/users/{post.user.id}')
+
+    else:
+        return render_template('edit-post.html', post_id=post_id, 
+                                                 title=post.title,                    content=post.content,
+                                                 user_id=post.user.id)
