@@ -2,9 +2,9 @@
 {% block content %}
     <h1>{{ name }}</h1>
     <ul>
-    {% for post in posts %}
+    {% for tag in tags %}
         <li> 
-          <a href="/post/{{ post.id }}">{{ post.name }}</a>
+          <a href="/tags/{{ tag.id }}">{{ tag.name }}</a>
         </li>
     {% endfor %}
     </ul>

@@ -165,7 +165,7 @@ def show_post(post_id):
     first_name = post.user.first_name
     last_name = post.user.last_name
 
-    return render_template('post-detail.html', title=title, content=content, first_name=first_name, 
+    return render_template('post-detail.html', title=title, content=content, first_name=first_name,
                            last_name=last_name,
                            post_id=post_id,
                            user_id=post.user.id)
@@ -215,25 +215,26 @@ def delete_post(post_id):
 
     return redirect(f'/users/{user}')
 
+
 @app.route('/tags')
 def list_tags():
     """Show the user a list of all tags."""
     all_tags = Tag.query.all()
-    
+
     return render_template('/tags.html', tags=all_tags)
 
 
 @app.route('/tag/new')
 def show_tag_form():
     """Sends user to add tag form."""
-    
+
     return render_template('create-tag.html')
 
 
 @app.route('/tag/new', methods=['POST'])
 def add_tag():
     """Sends user to add tag form."""
-    
+
     create_tag_form = request.form
     tag_name = create_tag_form["tag-name"]
 
@@ -248,15 +249,15 @@ def add_tag():
     return redirect('/tags')
 
 
-@app.route('/tag/<int:tag_id>')
+@app.route('/tags/<int:tag_id>')
 def tag_detail_page(tag_id):
     """Sends user to tag detail page."""
 
     tag = Tag.query.get(tag_id)
     name = tag.name
-    posts_lists = tag.posts
+    posts_list = tag.posts
 
-    return render_template('show-tag.html', name=name, posts=posts_list)
+    return render_template('show-tag.html', name=name, posts=posts_list,                                                      tag_id=tag_id)
 
 
 @app.route('/tags/<int:tag_id>/edit')
@@ -265,7 +266,8 @@ def show_tag_edit_form(tag_id):
 
     tag = Tag.query.get(tag_id)
 
-    return render_template('edit-tag.html', tag_id=tag_id, name=tag.name)
+    return render_template('edit-tag.html', tag_id=tag.id, name=tag.name)
+
 
 @app.route('/tags/<int:tag_id>/edit', methods=['POST'])
 def edit_tag(tag_id):
@@ -273,15 +275,16 @@ def edit_tag(tag_id):
 
     create_tag_form = request.form
     tag_name = create_tag_form["tag-name"]
-
+    print('TAG NAME IS', tag_name)
     if tag_name == '':
         flash('Please enter a tag name.')
-        return redirect(f'/tags/new{tag_id}')
-    
-    tag = Tag.query.get(tag_id)
-    tag.name = tag_name
+        return redirect(f'/tag/{tag_id}')
+    else:
+        tag = Tag.query.get(tag_id)
+        tag.name = tag_name
+        print('TAG NAME AFTER DB CHANGE IS', tag.name)
 
-    db.session.add(tag)
-    db.session.commit()
+        db.session.add(tag)
+        db.session.commit()
 
-    return redirect(f'/tags/{tag_id}')
+        return redirect(f'/tags/{tag_id}')
