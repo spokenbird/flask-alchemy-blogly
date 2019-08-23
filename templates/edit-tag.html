@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Edit a tag</h1>
+    <form action="">
+        <div class="form-group">
+            <label for="tag-name">Tag Name</label>
+            <input type="text" class="form-control" id="tag-name" name="tag-name" 
+            value="{{ tag.name }}">
+        </div>
+        <button type="submit" class="btn btn-success float-right">Edit</button>
+        <a href="/tags" class="btn btn-outline-info float-right mr-2">Cancel</a>
+    </form>
+{% endblock content %}

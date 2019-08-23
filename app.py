@@ -224,7 +224,7 @@ def list_tags():
 
 
 @app.route('/tag/new')
-def add_tag():
+def show_tag_form():
     """Sends user to add tag form."""
     
     return render_template('create-tag.html')
