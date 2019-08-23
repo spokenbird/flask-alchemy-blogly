@@ -246,3 +246,42 @@ def add_tag():
     db.session.commit()
 
     return redirect('/tags')
+
+
+@app.route('/tag/<int:tag_id>')
+def tag_detail_page(tag_id):
+    """Sends user to tag detail page."""
+
+    tag = Tag.query.get(tag_id)
+    name = tag.name
+    posts_lists = tag.posts
+
+    return render_template('show-tag.html', name=name, posts=posts_list)
+
+
+@app.route('/tags/<int:tag_id>/edit')
+def show_tag_edit_form(tag_id):
+    """Sends user to tag edit page."""
+
+    tag = Tag.query.get(tag_id)
+
+    return render_template('edit-tag.html', tag_id=tag_id, name=tag.name)
+
+@app.route('/tags/<int:tag_id>/edit', methods=['POST'])
+def edit_tag(tag_id):
+    """Edits the tag and sends back to tags page."""
+
+    create_tag_form = request.form
+    tag_name = create_tag_form["tag-name"]
+
+    if tag_name == '':
+        flash('Please enter a tag name.')
+        return redirect(f'/tags/new{tag_id}')
+    
+    tag = Tag.query.get(tag_id)
+    tag.name = tag_name
+
+    db.session.add(tag)
+    db.session.commit()
+
+    return redirect(f'/tags/{tag_id}')
