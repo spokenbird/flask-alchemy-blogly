@@ -214,3 +214,35 @@ def delete_post(post_id):
     db.session.commit()
 
     return redirect(f'/users/{user}')
+
+@app.route('/tags')
+def list_tags():
+    """Show the user a list of all tags."""
+    all_tags = Tag.query.all()
+    
+    return render_template('/tags.html', tags=all_tags)
+
+
+@app.route('/tag/new')
+def add_tag():
+    """Sends user to add tag form."""
+    
+    return render_template('create-tag.html')
+
+
+@app.route('/tag/new', methods=['POST'])
+def add_tag():
+    """Sends user to add tag form."""
+    
+    create_tag_form = request.form
+    tag_name = create_tag_form["tag-name"]
+
+    if tag_name == '':
+        flash('Please enter a tag name.')
+        return redirect('/tags/new')
+
+    new_tag = Tag(name=tag_name)
+    db.session.add(new_tag)
+    db.session.commit()
+
+    return redirect('/tags')
